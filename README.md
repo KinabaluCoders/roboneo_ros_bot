@@ -42,7 +42,7 @@ cd ~/microros_ws
 git clone -b jazzy https://github.com/micro-ROS/micro_ros_setup.git src/micro_ros_setup
 
 # Clone roboneo_bot package
-git clone https://github.com/Aqirito/roboneo_ros_bot.git src/roboneo_bot
+git clone https://github.com/KinabaluCoders/roboneo_ros_bot.git src/roboneo_bot
 
 # Optional: Clone teleop_twist_keyboard for manual control
 git clone -b dashing https://github.com/ros2/teleop_twist_keyboard.git src/teleop_twist_keyboard
