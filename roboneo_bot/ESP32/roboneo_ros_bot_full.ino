@@ -14,6 +14,13 @@
 #include <Wire.h>        // instantiate the Wire library
 #include <TFLI2C.h>      // TFLuna-I2C Library
 
+
+// Sensor availability flags
+// 0 = disabled, 1 = enabled
+#define USE_TFLUNA 1 
+#define USE_ULTRASONIC 1
+#define USE_COLOR_SENSOR 1
+
 // TF-Luna LiDAR
 TFLI2C tflI2C;
 int16_t  tfDist;    // distance in centimeters
@@ -38,11 +45,11 @@ long R_min = 330, R_max = 1000;
 long G_min = 330, G_max = 1000;
 long B_min = 330, B_max = 1000;
 // WiFi credentials
-const char* ssid = "YOUR_WIFI_SSID";
-const char* password = "YOUR_WIFI_PASSWORD";
+const char* ssid = "smartspacekk";
+const char* password = "smartspace09";
 
 // Host PC IP address (where micro-ROS agent is running)
-const char* host_ip = "192.168.0.100";  // Change to your PC's IP
+const char* host_ip = "192.168.0.108";  // Change to your PC's IP
 const int host_port = 8888;
 
 // Motor control pins (example pins, adjust as needed for your hardware)
@@ -611,25 +618,30 @@ void loop() {
 
     case AGENT_CONNECTED:
       // Read TF Luna LiDAR sensor via I2C periodically (non-blocking)
-      EXECUTE_EVERY_N_MS(100, {
-        float d = readLidarDistance();
-        if (d >= 0) {
-          last_lidar_distance = d;
-        }
-      });
-
+      if (USE_TFLUNA) {
+        EXECUTE_EVERY_N_MS(100, {
+          float d = readLidarDistance();
+          if (d >= 0) {
+            last_lidar_distance = d;
+          }
+        });
+      }
       // Read ultrasonic sensor periodically (non-blocking)
-      EXECUTE_EVERY_N_MS(100, {
-        float d = readUltrasonicDistance();
-        if (d >= 0) {
-          last_ultrasonic_distance = d;
-        }
-      });
+      if (USE_ULTRASONIC) {
+        EXECUTE_EVERY_N_MS(100, {
+          float d = readUltrasonicDistance();
+          if (d >= 0) {
+            last_ultrasonic_distance = d;
+          }
+        });
+      }
 
       // Read color sensor periodically (non-blocking)
-      EXECUTE_EVERY_N_MS(200, {
-        readColorSensor();
-      });
+      if (USE_COLOR_SENSOR) {
+        EXECUTE_EVERY_N_MS(200, {
+          readColorSensor();
+        });
+      }
 
       // Check agent connection more frequently
       EXECUTE_EVERY_N_MS(500,
